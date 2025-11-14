@@ -47,7 +47,7 @@ return [
         'main' => [
             'mautic.filemanager.menu.index' => [
                 'route'    => 'mautic_filemanager_index',
-                'access'   => ['user:users:edit'],
+                'access'   => 'filemanager:filemanager:view',
                 'parent'   => 'mautic.core.components',
                 'priority' => 150,
             ],
@@ -65,6 +65,14 @@ return [
             ],
             'mautic.filemanager.asset.subscriber' => [
                 'class' => MauticPlugin\MauticFileManagerBundle\EventListener\AssetSubscriber::class,
+            ],
+        ],
+        'permissions' => [
+            'mautic.filemanager.permissions' => [
+                'class' => MauticPlugin\MauticFileManagerBundle\Security\Permissions\FileManagerPermissions::class,
+                'arguments' => [
+                    'mautic.helper.core_parameters',
+                ],
             ],
         ],
     ],

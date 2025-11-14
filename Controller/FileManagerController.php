@@ -28,8 +28,8 @@ class FileManagerController extends CommonController
             $type = 'images';
         }
 
-        // Security check - require user edit permission (admin level)
-        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
+        // Security check - require file manager view permission
+        if (!$this->security->isGranted('filemanager:filemanager:view')) {
             return $this->accessDenied();
         }
 
@@ -77,7 +77,7 @@ class FileManagerController extends CommonController
      */
     public function uploadAction(Request $request): JsonResponse
     {
-        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
+        if (!$this->security->isGranted('filemanager:filemanager:edit')) {
             return new JsonResponse(['success' => false, 'message' => 'Access denied'], 403);
         }
 
@@ -129,7 +129,7 @@ class FileManagerController extends CommonController
      */
     public function deleteAction(Request $request): JsonResponse
     {
-        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
+        if (!$this->security->isGranted('filemanager:filemanager:delete')) {
             return new JsonResponse(['success' => false, 'message' => 'Access denied'], 403);
         }
 
@@ -166,7 +166,7 @@ class FileManagerController extends CommonController
      */
     public function renameAction(Request $request): JsonResponse
     {
-        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
+        if (!$this->security->isGranted('filemanager:filemanager:edit')) {
             return new JsonResponse(['success' => false, 'message' => 'Access denied'], 403);
         }
 
@@ -208,7 +208,7 @@ class FileManagerController extends CommonController
      */
     public function createFolderAction(Request $request): JsonResponse
     {
-        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
+        if (!$this->security->isGranted('filemanager:filemanager:create')) {
             return new JsonResponse(['success' => false, 'message' => 'Access denied'], 403);
         }
 

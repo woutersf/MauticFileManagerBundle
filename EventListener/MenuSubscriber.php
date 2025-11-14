@@ -27,8 +27,8 @@ class MenuSubscriber implements EventSubscriberInterface
 
     public function onBuildMenu(MenuEvent $event): void
     {
-        // Check if user has admin access - using proper Mautic permission format
-        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
+        // Check if user has file manager access
+        if (!$this->security->isGranted('filemanager:filemanager:view')) {
             return;
         }
 
