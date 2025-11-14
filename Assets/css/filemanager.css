@@ -1,0 +1,58 @@
+/**
+ * Mautic File Manager Styles
+ * Using standard Mautic styling
+ */
+
+/* Main wrapper */
+.filemanager-wrapper {
+    /* Inherit Mautic defaults */
+}
+
+/* Navigation tabs - standard Mautic */
+.filemanager-wrapper .nav-tabs {
+    /* Use Mautic default nav styling */
+}
+
+/* Breadcrumb - standard Mautic */
+.filemanager-breadcrumb {
+    margin-bottom: 15px;
+}
+
+.filemanager-breadcrumb .breadcrumb {
+    /* Use Mautic default breadcrumb styling */
+}
+
+/* Panel - standard Mautic */
+.filemanager-panel {
+    /* Use Mautic default panel styling */
+}
+
+/* Table - standard Mautic */
+.filemanager-table {
+    /* Use Mautic default table styling */
+}
+
+/* Icons */
+.filemanager-table .fa-folder {
+    margin-right: 6px;
+}
+
+.filemanager-table .fa-file {
+    margin-right: 6px;
+}
+
+/* Links */
+.filemanager-folder-link {
+    color: #333;
+    text-decoration: none;
+}
+
+.filemanager-folder-link:hover {
+    color: #4a9ff5;
+    text-decoration: none;
+}
+
+/* Folder icons color */
+.filemanager-table .fa-folder {
+    color: #f39c12;
+}

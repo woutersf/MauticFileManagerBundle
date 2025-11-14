@@ -1,0 +1,156 @@
+{% extends '@MauticCore/Default/content.html.twig' %}
+
+{% block headerTitle %}{{ 'mautic.filemanager.header'|trans }}{% endblock %}
+
+{% block content %}
+<div class="filemanager-wrapper">
+    {# Top Navigation Tabs #}
+    <ul class="nav nav-tabs mb-3">
+        <li class="{% if type == 'images' %}active{% endif %}">
+            <a href="{{ path('mautic_filemanager_index', {'type': 'images'}) }}">
+                <i class="fa fa-image"></i> {{ 'mautic.filemanager.type.images'|trans }}
+            </a>
+        </li>
+        <li class="{% if type == 'files' %}active{% endif %}">
+            <a href="{{ path('mautic_filemanager_index', {'type': 'files'}) }}">
+                <i class="fa fa-file"></i> {{ 'mautic.filemanager.type.files'|trans }}
+            </a>
+        </li>
+        <li class="{% if type == 'themes' %}active{% endif %}">
+            <a href="{{ path('mautic_filemanager_index', {'type': 'themes'}) }}">
+                <i class="fa fa-paint-brush"></i> {{ 'mautic.filemanager.type.themes'|trans }}
+            </a>
+        </li>
+    </ul>
+
+    {# Breadcrumb Navigation #}
+    <div class="filemanager-breadcrumb">
+        <ol class="breadcrumb">
+            {% for crumb in breadcrumbs %}
+                {% if loop.last %}
+                    <li class="active">{{ crumb.name }}</li>
+                {% else %}
+                    <li>
+                        <a href="{{ path('mautic_filemanager_index', {'type': type, 'path': crumb.path}) }}">
+                            {{ crumb.name }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </div>
+
+    {# File/Folder Table #}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <span>{{ 'mautic.filemanager.header'|trans }}</span>
+            </div>
+            <div class="panel-toolbar">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-sm btn-nospin" id="filemanager-upload-btn">
+                        <i class="fa fa-upload"></i> {{ 'mautic.filemanager.upload'|trans }}
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm btn-nospin" id="filemanager-create-folder-btn">
+                        <i class="fa fa-folder"></i> {{ 'mautic.filemanager.create_folder'|trans }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0 filemanager-table">
+                <thead>
+                    <tr>
+                        <th style="width: 30px;">
+                            <input type="checkbox" id="filemanager-select-all">
+                        </th>
+                        <th style="width: 50px;"></th>
+                        <th>{{ 'mautic.filemanager.column.name'|trans }}</th>
+                        <th style="width: 150px;">{{ 'mautic.filemanager.column.size'|trans }}</th>
+                        <th style="width: 180px;">{{ 'mautic.filemanager.column.modified'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if items is empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                <em>{{ 'mautic.filemanager.empty'|trans }}</em>
+                            </td>
+                        </tr>
+                    {% else %}
+                        {% for item in items %}
+                            <tr class="filemanager-item"
+                                data-name="{{ item.name }}"
+                                data-is-dir="{{ item.isDir ? '1' : '0' }}"
+                                data-is-parent="{{ item.isParent ? '1' : '0' }}">
+                                <td>
+                                    {% if not item.isParent %}
+                                        <input type="checkbox" class="filemanager-item-checkbox" value="{{ item.name }}">
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if not item.isParent %}
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                                                <i class="fa fa-cog"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="#" class="filemanager-rename" data-name="{{ item.name }}">
+                                                        <i class="fa fa-edit"></i> {{ 'mautic.filemanager.rename'|trans }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="filemanager-delete" data-name="{{ item.name }}">
+                                                        <i class="fa fa-trash text-danger"></i> {{ 'mautic.filemanager.delete'|trans }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.isDir %}
+                                        <a href="{{ path('mautic_filemanager_index', {
+                                            'type': type,
+                                            'path': item.isParent
+                                                ? (path|split('/')|slice(0, -1)|join('/'))
+                                                : (path ? path ~ '/' ~ item.name : item.name)
+                                        }) }}" class="filemanager-folder-link">
+                                            <i class="fa fa-folder text-warning"></i>
+                                            <strong>{{ item.name }}</strong>
+                                        </a>
+                                    {% else %}
+                                        <i class="fa fa-file text-muted"></i>
+                                        {% if item.url %}
+                                            <a href="{{ item.url }}" target="_blank">{{ item.name }}</a>
+                                        {% else %}
+                                            {{ item.name }}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td>{{ item.size }}</td>
+                                <td>{{ item.modified }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{# Hidden file upload input #}
+<input type="file" id="filemanager-file-input" multiple style="display: none;">
+
+{# Store current context in data attributes for JavaScript #}
+<div id="filemanager-context"
+     data-type="{{ type }}"
+     data-path="{{ path }}"
+     data-upload-url="{{ path('mautic_filemanager_upload') }}"
+     data-delete-url="{{ path('mautic_filemanager_delete') }}"
+     data-rename-url="{{ path('mautic_filemanager_rename') }}"
+     data-create-folder-url="{{ path('mautic_filemanager_create_folder') }}"
+     style="display: none;">
+</div>
+{% endblock %}
