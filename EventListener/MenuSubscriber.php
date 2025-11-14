@@ -27,8 +27,8 @@ class MenuSubscriber implements EventSubscriberInterface
 
     public function onBuildMenu(MenuEvent $event): void
     {
-        // Check if user has file manager access
-        if (!$this->security->isGranted('filemanager:filemanager:view')) {
+        // Check if user has admin access
+        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
             return;
         }
 

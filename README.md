@@ -183,8 +183,9 @@ The File Manager provides access to these directories:
 ### Access Control
 
 - **Admin-only access** - Only users with `user:users:edit` permission can access the File Manager
-- This typically means administrators and super users only
+- This is the standard Mautic permission for user management, typically assigned to administrators and super users only
 - Regular users and contacts cannot access this feature
+- The File Manager uses Mautic's built-in permission system rather than custom permissions for simplicity
 
 ### Path Security
 

@@ -28,8 +28,8 @@ class FileManagerController extends CommonController
             $type = 'images';
         }
 
-        // Security check - require file manager view permission
-        if (!$this->security->isGranted('filemanager:filemanager:view')) {
+        // Security check - require admin permission
+        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
             return $this->accessDenied();
         }
 
@@ -77,7 +77,7 @@ class FileManagerController extends CommonController
      */
     public function uploadAction(Request $request): JsonResponse
     {
-        if (!$this->security->isGranted('filemanager:filemanager:edit')) {
+        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
             return new JsonResponse(['success' => false, 'message' => 'Access denied'], 403);
         }
 
@@ -129,7 +129,7 @@ class FileManagerController extends CommonController
      */
     public function deleteAction(Request $request): JsonResponse
     {
-        if (!$this->security->isGranted('filemanager:filemanager:delete')) {
+        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
             return new JsonResponse(['success' => false, 'message' => 'Access denied'], 403);
         }
 
@@ -166,7 +166,7 @@ class FileManagerController extends CommonController
      */
     public function renameAction(Request $request): JsonResponse
     {
-        if (!$this->security->isGranted('filemanager:filemanager:edit')) {
+        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
             return new JsonResponse(['success' => false, 'message' => 'Access denied'], 403);
         }
 
@@ -208,7 +208,7 @@ class FileManagerController extends CommonController
      */
     public function createFolderAction(Request $request): JsonResponse
     {
-        if (!$this->security->isGranted('filemanager:filemanager:create')) {
+        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
             return new JsonResponse(['success' => false, 'message' => 'Access denied'], 403);
         }
 
