@@ -1,8 +1,8 @@
 # Mautic File Manager Bundle
 
-![File Manager Icon](Assets/folder2.png)
-
 A powerful file and folder management interface for Mautic that allows administrators to manage media files, uploaded files, and theme assets directly from the Mautic admin interface.
+
+![File Manager Screenshot](Assets/screenshot.png)
 
 ## Overview
 

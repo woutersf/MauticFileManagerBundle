@@ -49,6 +49,7 @@ return [
                 'iconClass' => 'fa-folder-open',
                 'route'     => 'mautic_filemanager_index',
                 'access'    => 'user:users:edit',
+                'parent'    => 'mautic.core.components',
                 'priority'  => 150,
             ],
         ],
