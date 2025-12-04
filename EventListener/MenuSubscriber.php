@@ -6,15 +6,14 @@ namespace MauticPlugin\MauticFileManagerBundle\EventListener;
 
 use Mautic\CoreBundle\CoreEvents;
 use Mautic\CoreBundle\Event\MenuEvent;
-use Mautic\CoreBundle\Helper\CoreParametersHelper;
-use Mautic\CoreBundle\Security\Permissions\CorePermissions;
+use Mautic\IntegrationsBundle\Helper\IntegrationsHelper;
+use MauticPlugin\MauticFileManagerBundle\Integration\FileManagerIntegration;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MenuSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private CoreParametersHelper $coreParametersHelper,
-        private CorePermissions $security
+        private IntegrationsHelper $integrationsHelper
     ) {
     }
 
@@ -27,18 +26,11 @@ class MenuSubscriber implements EventSubscriberInterface
 
     public function onBuildMenu(MenuEvent $event): void
     {
-        // Check if user has admin access
-        if (!$this->security->isGranted(['user:users:edit'], 'MATCH_ONE')) {
-            return;
+        // Check if integration is enabled
+        $integration = $this->integrationsHelper->getIntegration(FileManagerIntegration::NAME);
+        if (!$integration || !$integration->getIntegrationConfiguration()->getIsPublished()) {
+            // Remove the menu item if integration is disabled
+            $event->removeMenuItems('mautic.filemanager.menu.index');
         }
-
-        $event->addMenuItems([
-            [
-                'route'    => 'mautic_filemanager_index',
-                'id'       => 'mautic_filemanager_index',
-                'parent'   => 'mautic.core.components',
-                'priority' => 150,
-            ],
-        ]);
     }
 }

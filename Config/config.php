@@ -46,25 +46,39 @@ return [
     'menu' => [
         'main' => [
             'mautic.filemanager.menu.index' => [
-                'route'    => 'mautic_filemanager_index',
-                'access'   => ['user:users:edit'],
-                'parent'   => 'mautic.core.components',
-                'priority' => 150,
+                'iconClass' => 'fa-folder-open',
+                'route'     => 'mautic_filemanager_index',
+                'access'    => 'user:users:edit',
+                'priority'  => 150,
             ],
         ],
     ],
 
     'services' => [
         'events' => [
+            'mautic.filemanager.asset.subscriber' => [
+                'class' => MauticPlugin\MauticFileManagerBundle\EventListener\AssetSubscriber::class,
+            ],
             'mautic.filemanager.menu.subscriber' => [
                 'class'     => MauticPlugin\MauticFileManagerBundle\EventListener\MenuSubscriber::class,
                 'arguments' => [
-                    'mautic.helper.core_parameters',
-                    'mautic.security',
+                    'mautic.integrations.helper',
                 ],
             ],
-            'mautic.filemanager.asset.subscriber' => [
-                'class' => MauticPlugin\MauticFileManagerBundle\EventListener\AssetSubscriber::class,
+        ],
+        'integrations' => [
+            'mautic.integration.filemanager' => [
+                'class' => MauticPlugin\MauticFileManagerBundle\Integration\FileManagerIntegration::class,
+                'tags'  => [
+                    'mautic.integration',
+                    'mautic.basic_integration',
+                ],
+            ],
+            'mautic.integration.filemanager.configuration' => [
+                'class' => MauticPlugin\MauticFileManagerBundle\Integration\Support\ConfigSupport::class,
+                'tags'  => [
+                    'mautic.config_integration',
+                ],
             ],
         ],
     ],
